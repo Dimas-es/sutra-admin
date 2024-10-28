@@ -33,9 +33,9 @@ function Header() {
     }
 
     return (
-        <div className='p-5 shadow-sm flex justify-between'>
+        <div className='p-5 shadow-md flex justify-between'>
             <div className='flex items-center gap-8'>
-                <Image src='/logo.png' alt='logo' width={150} height={100} />
+                <Image src='/logog.png' alt='logo' width={100} height={50} />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <h2 className='hidden md:flex gap-2 items-center border rounded-full p-2 px-10 bg-slate-200 cursor-pointer'>
@@ -46,22 +46,21 @@ function Header() {
                         <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {categoryList.map((category) => (
-                            <Link href={'/products-category/'+category.name}>
-                            <DropdownMenuItem className='flex gap-2 items-center' key={category.id}>
-                                {category.icon && category.icon.length > 0 && (
-                                    <Image
-                                        src={
-                                            // Gunakan BASE_URL untuk mengakses gambar
-                                            process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-                                            category.icon[0].url
-                                        }
-                                        alt={category.icon[0].name || 'icon'} // Ambil nama ikon sebagai alt
-                                        width={30}
-                                        height={30}
-                                    />
-                                )}
-                                <h2 className='text-lg'>{category.name}</h2>
-                            </DropdownMenuItem>
+                            <Link href={'/products-category/' + category.name} key={category.id}>
+                                <DropdownMenuItem className='flex gap-2 items-center'>
+                                    {category.icon && category.icon.length > 0 && (
+                                        <Image
+                                            src={
+                                                process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
+                                                category.icon[0].url
+                                            }
+                                            alt={category.icon[0].name || 'icon'}
+                                            width={30}
+                                            height={30}
+                                        />
+                                    )}
+                                    <h2 className='text-lg'>{category.name}</h2>
+                                </DropdownMenuItem>
                             </Link>
                         ))}
                     </DropdownMenuContent>

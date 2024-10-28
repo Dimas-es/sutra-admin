@@ -19,7 +19,7 @@ const ProductItem = ({ product }) => {
         : null;
 
     return (
-        <div className="p-2 md:p-6 flex flex-col items-center justify-center gap-3 border rounded-lg hover:scale-105 cursor-pointer hover:shadow-md transition-all ease-in-out">
+        <div className="p-2 md:p-6 flex flex-col items-center justify-center gap-3 border border-primary rounded-lg hover:scale-105 cursor-pointer hover:shadow-md transition-all ease-in-out">
             {imageUrl ? ( // Cek apakah URL gambar ada
                 <Image
                     src={imageUrl}
