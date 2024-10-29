@@ -2,7 +2,7 @@ const { default: axios } = require("axios");
 
 // Sesuaikan dengan URL backend kamu
 const axiosClient = axios.create({
-    baseURL: 'http://192.168.2.144:1337/api'
+    baseURL: 'http://localhost:1337/api'
 });
 
 // Ambil kategori
