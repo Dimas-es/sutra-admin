@@ -1,41 +1,34 @@
 const { default: axios } = require("axios");
 
-// Sesuaikan dengan URL backend kamu
+// Sesuaikan dengan URL backend
 const axiosClient = axios.create({
     baseURL: 'http://localhost:1337/api'
 });
 
-// Ambil kategori
-const getCategory = () => axiosClient.get('/categories?populate=*');
-
-// Ambil slider
-const getSliders = () =>
-    axiosClient.get('/sliders?populate=*').then(resp => {
-        console.log("Sliders Response:", resp.data); // Log respons slider
-        return resp.data.data;
-    });
-
-// Ambil daftar kategori
-const getCategoryList = () => axiosClient.get('/categories?populate=*').then(resp => {
-    return resp.data.data;
+// Fungsi untuk menambah produk ke keranjang
+const addToCart = (data, jwt) => axiosClient.post('/user-carts', data, {
+    headers: {
+        Authorization: 'Bearer ' + jwt
+    }
 });
 
-// Ambil semua produk
-const getAllProducts = () =>
-    axiosClient.get('/products?populate=*').then(resp => {
-        console.log("Products Response:", resp.data); // Log respons produk
-        return resp.data.data;
-    });
+// Fungsi API lainnya
+const getCategory = () => axiosClient.get('/categories?populate=*');
+const getSliders = () => axiosClient.get('/sliders?populate=*').then(resp => resp.data.data);
+const getCategoryList = () => axiosClient.get('/categories?populate=*').then(resp => resp.data.data);
+const getAllProducts = () => axiosClient.get('/products?populate=*').then(resp => resp.data.data);
+const getProductByCategory = (category) => axiosClient.get('/products?filters[categories][name][$in]=' + category + "&populate=*").then(resp => resp.data.data);
+const registerUser = (username, email, password) => axiosClient.post('/auth/local/register', { username, email, password });
+const SignIn = (email, password) => axiosClient.post('/auth/local', { identifier: email, password });
 
-const getProductByCategory=(category)=>axiosClient.get('/products?filters[categories][name][$in]='+category+"&populate=*").then(resp=>{
-    return resp.data.data;
-})
-
-// Ekspor fungsi API
+// Ekspor semua fungsi API
 export default {
     getCategory,
     getSliders,
     getCategoryList,
     getAllProducts,
-    getProductByCategory
+    getProductByCategory,
+    registerUser,
+    SignIn,
+    addToCart
 };

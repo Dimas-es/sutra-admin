@@ -8,7 +8,7 @@ import Footer from "./_components/Footer";
 
 export default async function Home() {
     const sliderList = await GlobalApi.getSliders();
-    const categoryList = await GlobalApi.getCategoryList();
+    // const categoryList = await GlobalApi.getCategoryList();
     const productList = await GlobalApi.getAllProducts();
 
     return (
@@ -16,7 +16,7 @@ export default async function Home() {
             {/* Sliders */}
             <Sliders sliderList={sliderList} />
             {/* Category */}
-            <CategoryList categoryList={categoryList}/>
+            {/* <CategoryList categoryList={categoryList}/> */}
             {/* Product */}
             <ProductList productList={productList}/>
             {/* Banner */}

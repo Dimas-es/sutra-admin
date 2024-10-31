@@ -1,8 +1,11 @@
 'use client'
 import { Button } from '@/components/ui/button';
-import { ShoppingBasket } from 'lucide-react';
+import { LoaderCircle, LoaderIcon, ShoppingBasket } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import GlobalApi from '../_utils/GlobalApi';
+import { toast } from 'sonner';
 
 const ProductItemDetails = ({ product }) => {
     // Cek apakah gambar tersedia
@@ -10,14 +13,47 @@ const ProductItemDetails = ({ product }) => {
         ? `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${product.images[0].url}`
         : null;
 
-    // Debugging: Cek apakah product memiliki itemQuantityType
-    console.log(product); // Hapus ini setelah debugging
+    const jwt=sessionStorage.getItem('jwt')
+    const user=JSON.parse(sessionStorage.getItem('user'))
 
     const [productTotalPrice, setProductTotalPrice] = useState(
         product.sellingPrice || product.mrp
     );
 
+    const router=useRouter()
+
     const [quantity, setQuantity] = useState(1);
+    const [loading,setLoading]=useState(false)
+    const addToCart=()=>{
+        setLoading(true)
+        if (!jwt) {
+            router.push('/sign-in')
+            setLoading(false)
+            return;
+        } 
+
+        const data={
+            data:{
+                quantity: quantity,
+                amount: (quantity * productTotalPrice).toFixed(2),
+                products: product.id,
+                users_permissions_users: user.id,
+                userid:user.id
+            } 
+        }
+        console.log(data)
+        GlobalApi.addToCart(data, jwt)
+            .then(resp => {
+                console.log('Response:', resp); // Cek respons sukses
+                toast('Added to cart');
+                setLoading(false)
+            })
+            .catch(e => {
+                console.log('Error:', e); // Cek detail error
+                toast('Error while adding into cart');
+                setLoading(false)
+            });
+    }
 
     return (
         <div className='grid grid-cols-1 md:grid-cols-2 p-7 bg-white text-black'>
@@ -56,9 +92,11 @@ const ProductItemDetails = ({ product }) => {
                         </div>
                         <h2 className='text-2xl font-bold'> = ${(quantity*productTotalPrice).toFixed(2)}</h2>
                     </div>
-                    <Button className='flex gap-3'>
+                    <Button className='flex gap-3' onClick={()=>addToCart()}
+                        disabled={loading}
+                        >
                         <ShoppingBasket />
-                        Add To Cart
+                        {loading?<LoaderCircle className='animate-spin' />:'Add To Cart'}
                     </Button>
                 </div>
                 {/* Menampilkan kategori */}
