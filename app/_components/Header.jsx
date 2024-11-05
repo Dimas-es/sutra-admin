@@ -18,7 +18,8 @@ import { useRouter } from 'next/navigation'
 function Header() {
     const [categoryList, setCategoryList] = useState([]);
     const [isLogin, setIsLogin] = useState(false);
-    const [totalCartItem,setTotalCartItem]=useState(0) // Pindahkan ke useState
+    const [user, setUser] = useState(null); // Tambahkan state untuk user
+    const [totalCartItem, setTotalCartItem] = useState(0);
     const route = useRouter();
 
     useEffect(() => {
@@ -26,6 +27,8 @@ function Header() {
 
         // Cek sessionStorage hanya di klien
         if (typeof window !== "undefined") {
+            const storedUser = sessionStorage.getItem('user');
+            setUser(storedUser ? JSON.parse(storedUser) : null);
             setIsLogin(!!sessionStorage.getItem('jwt'));
         }
     }, []);
@@ -37,14 +40,14 @@ function Header() {
             setCategoryList(resp.data.data);
         } catch (error) {
             console.error("Error fetching categories:", error);
-            // Optionally: set error state and display a message to the user
         }
     };
 
-
-
-    const getCartItems=()=>{
-        
+    const getCartItems = async () => {
+        if (user) {
+            const cartItemList = await GlobalApi.getCartItem(user);
+            setTotalCartItem(cartItemList.length); // Contoh, tergantung respons API
+        }
     }
 
     const onSignOut = () => {

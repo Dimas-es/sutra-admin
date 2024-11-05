@@ -100,13 +100,13 @@ const ProductItemDetails = ({ product }) => {
                     </Button>
                 </div>
                 {/* Menampilkan kategori */}
-                <h2>
+                {/* <h2>
                     <span className='font-bold'>Category:</span>
                     {Array.isArray(product.categories) && product.categories.length > 0
                         ? product.categories.map((category) => category.name).join(', ') // Menampilkan kategori sebagai string
                         : ' No Category' // Jika tidak ada kategori
                     }
-                </h2>
+                </h2> */}
             </div>
         </div>
     );
